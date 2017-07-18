@@ -5,7 +5,7 @@ body {
 }
 .toronto {
   background-size: cover;
-  background-position-y: -130px;
+  background-position-y: -150px;
   background-image:  linear-gradient(
           rgba(0, 0, 0, 0.5),
           rgba(0, 0, 0, 0.5)
