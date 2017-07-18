@@ -12,3 +12,12 @@ body {
   ), url('../../images/1.png');
   color: #FFF;
 }
+#map {
+  height: 400px;
+  width: 100%;
+}
+.break{
+
+  padding-top: 50px;
+
+}
