@@ -1,4 +1,7 @@
 var map;
+/*
+* Init: initializes the google map api
+* */
 function init(){
 
     var toronto = {lat: 43.70011, lng: -79.4163};
@@ -7,6 +10,9 @@ function init(){
         center: toronto
     });
 }
+/*
+* populateMap: draws all the markers on the map using the markerClusterer option
+* */
 function populateMap(json){
 
     //events response
@@ -14,7 +20,11 @@ function populateMap(json){
     var mylatlong;
     var mycontent;
 
+    //Array to store al the markers
     var markers = [];
+    //used for closing previous infoWindow
+    var prev_infowindow =false;
+
     $.each(events, function(index,event){
         var eventDate = event.calEvent.startDate;
         var pattYear = new RegExp(new Date().getFullYear());
@@ -23,7 +33,13 @@ function populateMap(json){
             var latitude = parseFloat(event.calEvent.locations[0].coords.lat);
             var longitude = parseFloat(event.calEvent.locations[0].coords.lng);
             mylatlong = {lat: latitude, lng: longitude};
-            var eventName = "<h6>"+event.calEvent.eventName+"</h6>";
+            var eventShortDesc = "<p><b> Name: </b>"+event.calEvent.eventName+"</p>" +
+                "<p><b>Address: </b>"+event.calEvent.locations[0].address+"</b>";
+            //If the event has short description, then it is added to the popup
+            if (event.calEvent.shortDescription){
+
+                eventShortDesc+="<p><b>Short description: </b>"+event.calEvent.shortDescription+"</b>";
+            }
 
             //check for events with the exact same location
             if (markers.length != 0) {
@@ -48,9 +64,17 @@ function populateMap(json){
                 title: event.calEvent.eventName
             });
             var infowindow = new google.maps.InfoWindow({
-                content: eventName
+                content: eventShortDesc
             });
             marker.addListener('click',function(){
+
+                //Check if there is another infoWindow open,
+                //if there is then close it
+                if( prev_infowindow ) {
+                    prev_infowindow.close();
+                }
+
+                prev_infowindow = infowindow;
 
                 infowindow.open(map,marker);
 
@@ -60,13 +84,17 @@ function populateMap(json){
 
 
     });
+    //Creates the cluster using the images
     var markerCluster = new MarkerClusterer(map, markers,
         {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
         });
 
 }
-
+/*
+* Gets the JSON from the given URL, if it fails, then it is going
+* to use the local file events.json
+* */
 $(document).ready(function(){
     $.ajax({
         url: 'http://app.toronto.ca/cc_sr_v1_app/data/edc_eventcal_APR?limit=500',
