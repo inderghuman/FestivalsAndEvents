@@ -7,6 +7,66 @@ function init(){
         center: toronto
     });
 }
+function populateMap(json){
+
+    //events response
+    var events = json;
+    var mylatlong;
+    var mycontent;
+
+    var markers = [];
+    $.each(events, function(index,event){
+        var eventDate = event.calEvent.startDate;
+        var pattYear = new RegExp(new Date().getFullYear());
+        //only shows current year events
+        if (pattYear.test(eventDate)){
+            var latitude = parseFloat(event.calEvent.locations[0].coords.lat);
+            var longitude = parseFloat(event.calEvent.locations[0].coords.lng);
+            mylatlong = {lat: latitude, lng: longitude};
+            var eventName = "<h6>"+event.calEvent.eventName+"</h6>";
+
+            //check for events with the exact same location
+            if (markers.length != 0) {
+
+                for (var i=0; i < markers.length; i++) {
+                    var existingMarker = markers[i];
+                    var pos = existingMarker.position;
+
+                    //if a marker already exists in the same position as this marker
+                    if (mylatlong.lat==pos.lat() &&
+                        mylatlong.lng==pos.lng()) {
+                        //update the position of the coincident marker by applying a small multipler to its coordinates
+                        mylatlong.lat = mylatlong.lat + (Math.random() -.5) / 1500;
+                        mylatlong.lng = mylatlong.lng + (Math.random() -.5) / 1500;
+                    }
+                }
+            }
+            var marker = new google.maps.Marker({
+
+                position : mylatlong,
+                //map: map,
+                title: event.calEvent.eventName
+            });
+            var infowindow = new google.maps.InfoWindow({
+                content: eventName
+            });
+            marker.addListener('click',function(){
+
+                infowindow.open(map,marker);
+
+            });
+            markers.push(marker);
+        }
+
+
+    });
+    var markerCluster = new MarkerClusterer(map, markers,
+        {
+            imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+        });
+
+}
+
 $(document).ready(function(){
     $.ajax({
         url: 'http://app.toronto.ca/cc_sr_v1_app/data/edc_eventcal_APR?limit=500',
@@ -14,35 +74,8 @@ $(document).ready(function(){
         success: function(json) {
 
             console.log("event JSON load");
-            var events = json;
+            populateMap(json);
 
-            var mylatlong;
-            var mycontent;
-
-            $.each(events, function(index,event){
-                var latitude = parseFloat(event.calEvent.locations[0].coords.lat);
-                var longitude = parseFloat(event.calEvent.locations[0].coords.lng);
-                mylatlong = {lat: latitude, lng: longitude};
-                var eventName = "<h6>"+event.calEvent.eventName+"</h6>";
-
-                var marker = new google.maps.Marker({
-
-                    position : mylatlong,
-                    map: map,
-                    title: event.calEvent.eventName
-                });
-                var infowindow = new google.maps.InfoWindow({
-                    content: eventName
-                });
-
-
-                marker.addListener('click',function(){
-
-                    infowindow.open(map,marker);
-
-                });
-
-            });
         },
 
         error: function (jqXHR, exception) {
@@ -63,36 +96,9 @@ $(document).ready(function(){
                 msg = 'Uncaught Error.\n' + jqXHR.responseText;
             }
             console.log(msg);
-            $.getJSON( "../Ajax/events.json", function(data) {
+            $.getJSON( "../Ajax/events.json", function(json) {
 
-                var events = data;
-
-                var mylatlong;
-                var mycontent;
-
-                $.each(events, function(index,event){
-                    var latitude = parseFloat(event.calEvent.locations[0].coords.lat);
-                    var longitude = parseFloat(event.calEvent.locations[0].coords.lng);
-                    mylatlong = {lat: latitude, lng: longitude};
-                    var eventName = "<h6>"+event.calEvent.eventName+"</h6>";
-
-                    var marker = new google.maps.Marker({
-
-                        position : mylatlong,
-                        map: map,
-                        title: event.calEvent.eventName
-                    });
-                    var infowindow = new google.maps.InfoWindow({
-                        content: eventName
-                    });
-
-                    marker.addListener('click',function(){
-
-                        infowindow.open(map,marker);
-
-                    });
-
-                });
+                populateMap(json);
 
             });
         }
