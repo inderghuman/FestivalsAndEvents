@@ -108,6 +108,8 @@ function moreInfo(event) {
     var eventRes = document.getElementById('eventRes');
     var eventPhone = document.getElementById('eventPhone');
     var eventCat = document.getElementById('eventCat');
+    var eventEmail = document.getElementById('eventEmail');
+    var eventWebsite = document.getElementById('eventWebsite');
 
     description.innerHTML = event.calEvent.description;
     eventName.innerHTML = "Event: <i>" + event.calEvent.eventName + "</i>";
@@ -117,6 +119,8 @@ function moreInfo(event) {
     eventFree.innerHTML = "<b>Free: </b>" + (event.calEvent.freeEvent ? event.calEvent.freeEvent : "Unavailable");
     eventRes.innerHTML = "<b>Reservation Required: </b>" + (event.calEvent.reservationsRequired ? event.calEvent.reservationsRequired : "Unavailable");
     eventPhone.innerHTML = "<b>Phone Number: </b>" + (event.calEvent.eventPhone ? event.calEvent.eventPhone : "Unavailable");
+    eventEmail.innerHTML = "<b>Email: </b>" + (event.calEvent.eventEmail ? event.calEvent.eventEmail : "Unavailable");
+    eventWebsite.innerHTML = "<b>Website: </b>" + (event.calEvent.eventWebsite ? event.calEvent.eventWebsite : "Unavailable");
     eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
 
     document.getElementById("eventDetails").style.display = "inline";
