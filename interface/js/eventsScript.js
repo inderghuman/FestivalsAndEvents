@@ -184,7 +184,7 @@ function moreInfo(event) {
     eventPhone.innerHTML = "<b>Phone Number: </b>" + (event.calEvent.eventPhone ? event.calEvent.eventPhone : "Unavailable");
     eventEmail.innerHTML = "<b>Email: </b>" + (event.calEvent.eventEmail ? event.calEvent.eventEmail : "Unavailable");
     eventWebsite.innerHTML = "<b>Website: </b>" + (event.calEvent.eventWebsite ? '<a href="'+event.calEvent.eventWebsite+'" target="_blank">'+event.calEvent.eventWebsite+'</a>' : "Unavailable");
-    eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
+    eventImage.src = (event.calEvent.thumbImage ? "http://app.toronto.ca" + event.calEvent.thumbImage.url: "Unavailable") ;
 
     document.getElementById("eventDetails").style.display = "inline";
     //document.getElementById("eventDetails").scrollIntoView(); //Automatically scroll page to eventDetails

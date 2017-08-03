@@ -12,6 +12,17 @@ body {
   ), url('../../images/1.png');
   color: #FFF;
 }
+.instagram {
+
+  background-size: cover;
+  background-position-y: -200px;
+  background-image: linear-gradient(
+          rgba(0, 0, 0, 0.5),
+          rgba(0, 0, 0, 0.5)
+  ), url('../../images/2.jpg');
+  color: #FFF;
+
+}
 #map {
   height: 400px;
   width: 100%;
@@ -25,4 +36,46 @@ body {
 }
 .padding-15 {
   padding: 15px;
+}
+
+.logo {   /* first square */
+  position: relative;
+  width: 170px;
+  height: 170px;
+  border-radius: 25%;
+  left: 50%;
+  margin-left: 30%;
+  margin-top: -170px;
+  background: transparent;
+  border: 15px solid #fff;
+  top: 40px;
+}
+
+
+.logo:before,
+.logo:after {
+  content: "";
+  display: block;
+  position: absolute;
+  margin:auto ;
+}
+
+
+.logo:before {   /* large circle */
+  width: 85px;
+  height: 85px;
+  border-radius: 100%;
+  top:calc(100% / 5);
+  left:calc(100% / 5);
+  background: transparent;
+  border: 15px solid #fff;
+}
+
+.logo:after {     /* small circle */
+  width: 20px;
+  height:20px;
+  background: #fff;
+  border-radius: 100%;
+  right: 10%;
+  top: 10%;
 }
