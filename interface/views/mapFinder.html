@@ -30,7 +30,7 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
 <div class="container">
 <div class="navbar-header">
-<a class="navbar-brand" href="index.html">Main menu</a>
+<a class="navbar-brand" href="index.html">Home</a>
 </div>
 </div>
 </nav>
@@ -40,7 +40,7 @@
 
 <div class="container break">
     <!-- Example row of columns -->
-    <div class="row">
+    <div class="row" id="eventsMapAPI">
         <div class="col-md-8">
             <h3>Trending in Toronto</h3>
             <hr>
@@ -93,6 +93,8 @@
                         </p>
                 </div>
                 <p>
+                    <span id="eventStartDate"></span><br>
+                    <span id="eventEndDate"></span><br>
                     <span id="eventAddress"></span><br>
                     <span id="eventCat"></span><br>
                     <span id="eventPeak"></span><br>
@@ -104,11 +106,12 @@
                 </p>
                 <p class="bg-success padding-15">
                     <b>Need help to get there?</b> &nbsp; &nbsp;
-                    <select onchange="selectTransportation()">
-                        <option selected="selected" value="">Select method of transportation</option>
-                        <option value="car">Car</option>
-                        <option value="bus">Bus</option>
-                        <option value="walking">Walking</option>
+                    <select onchange="selectTransportation()" id="transportSelect">
+                        <option selected="selected" value="select">Select method of transportation</option>
+                        <option value="DRIVING">Driving</option>
+                        <option value="WALKING">Walking</option>
+                        <option value="BICYCLING">Bicycling</option>
+                        <option value="TRANSIT">Transit</option>
                     </select>
                 </p>
 

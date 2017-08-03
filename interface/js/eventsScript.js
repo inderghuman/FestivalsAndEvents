@@ -1,18 +1,71 @@
 var map;
+var directionsDisplay;
+var directionsService;
+var currentLat;
+var currentLgt;
+var selectedMarker;
 //var eventDetails = document.getElementById("eventDetails");
 //var eventSocialMedia = document.getElementById("eventSocialMedia");
 //eventDetails.style.display = "none";
 //eventSocialMedia.style.display = "none";
+
 /*
 * Init: initializes the google map api
 * */
 function init(){
+
+    directionsService = new google.maps.DirectionsService();
+    directionsDisplay = new google.maps.DirectionsRenderer();
     var toronto = {lat: 43.70011, lng: -79.4163};
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
         center: toronto
     });
+    navigator.geolocation.getCurrentPosition(function(location) {
+        console.log(location.coords.latitude);
+        console.log(location.coords.longitude);
+        currentLat = location.coords.latitude;
+        currentLgt = location.coords.longitude;
+        //console.log(location.coords.accuracy);
+    });
 }
+
+/*
+* traceRoute: Display the best route to take to get to the selected marker
+* using the method (DRIVING, WALKING, BICYCLING) selected.
+* The starting point is obtained using geolocation
+* */
+function traceRoute(marker, method) {
+
+    if(method!="select"){
+
+        document.getElementById("eventsMapAPI").scrollIntoView();
+        var pos = marker.position;
+        var start = new google.maps.LatLng(currentLat, currentLgt);
+        var end = new google.maps.LatLng(pos.lat(), pos.lng());
+        var bounds = new google.maps.LatLngBounds();
+        bounds.extend(start);
+        bounds.extend(end);
+        map.fitBounds(bounds);
+
+        var request = {
+            origin: start,
+            destination: end,
+            travelMode: google.maps.TravelMode[method]
+        };
+        directionsService.route(request, function (response, status) {
+            if (status == google.maps.DirectionsStatus.OK) {
+                directionsDisplay.setDirections(response);
+                directionsDisplay.setMap(map);
+            } else {
+                alert("Directions Request from " + start.toUrlValue(6) + " to " + end.toUrlValue(6) + " failed: " + status);
+            }
+        });
+
+    }
+
+}
+
 /*
 * populateMap: draws all the markers on the map using the markerClusterer option
 * */
@@ -81,10 +134,12 @@ function populateMap(json){
 
                 infowindow.open(map,marker);
 
-                moreInfo(event);
+                moreInfo(event, marker);
+                selectedMarker = marker;
 
             });
             markers.push(marker);
+
         }
 
 
@@ -97,6 +152,9 @@ function populateMap(json){
 
 }
 
+/*
+moreInfo: Displays more information about the event
+* */
 function moreInfo(event) {
 
     var description = document.getElementById('description');
@@ -110,25 +168,37 @@ function moreInfo(event) {
     var eventCat = document.getElementById('eventCat');
     var eventEmail = document.getElementById('eventEmail');
     var eventWebsite = document.getElementById('eventWebsite');
+    var eventStartDate = document.getElementById('eventStartDate');
+    var eventEndDate = document.getElementById('eventEndDate');
+
 
     description.innerHTML = event.calEvent.description;
     eventName.innerHTML = "Event: <i>" + event.calEvent.eventName + "</i>";
     eventAddress.innerHTML = "<b>Address:</b> " + event.calEvent.locations[0].address;
+    eventStartDate.innerHTML = "<b>Start date:</b> " + event.calEvent.startDate.split('T')[0];
+    eventEndDate.innerHTML = "<b>End date:</b> " + event.calEvent.endDate.split('T')[0];
     eventCat.innerHTML = "<b>Event Category: </b>" + (event.calEvent.categoryString ? event.calEvent.categoryString : "Unavailable");
     eventPeak.innerHTML = "<b>Peak Attendance: </b>" + (event.calEvent.expectedPeak ? event.calEvent.expectedPeak : "Unavailable");
     eventFree.innerHTML = "<b>Free: </b>" + (event.calEvent.freeEvent ? event.calEvent.freeEvent : "Unavailable");
     eventRes.innerHTML = "<b>Reservation Required: </b>" + (event.calEvent.reservationsRequired ? event.calEvent.reservationsRequired : "Unavailable");
     eventPhone.innerHTML = "<b>Phone Number: </b>" + (event.calEvent.eventPhone ? event.calEvent.eventPhone : "Unavailable");
     eventEmail.innerHTML = "<b>Email: </b>" + (event.calEvent.eventEmail ? event.calEvent.eventEmail : "Unavailable");
-    eventWebsite.innerHTML = "<b>Website: </b>" + (event.calEvent.eventWebsite ? event.calEvent.eventWebsite : "Unavailable");
+    eventWebsite.innerHTML = "<b>Website: </b>" + (event.calEvent.eventWebsite ? '<a href="'+event.calEvent.eventWebsite+'" target="_blank">'+event.calEvent.eventWebsite+'</a>' : "Unavailable");
     eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
 
     document.getElementById("eventDetails").style.display = "inline";
     //document.getElementById("eventDetails").scrollIntoView(); //Automatically scroll page to eventDetails
 
+    var element = document.getElementById('transportSelect');
+    element.value = "select";
 }
 
-function selectTransportation(method){
+function selectTransportation(){
+
+    var trasnportSelect = document.getElementById("transportSelect");
+    var method = trasnportSelect.options[trasnportSelect.selectedIndex].value;
+
+    traceRoute(selectedMarker, method);
 
 }
 /*
