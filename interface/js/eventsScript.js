@@ -78,6 +78,8 @@ function populateMap(json){
 
                 infowindow.open(map,marker);
 
+                moreInfo(event);
+
             });
             markers.push(marker);
         }
@@ -89,6 +91,31 @@ function populateMap(json){
         {
             imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
         });
+
+}
+
+function moreInfo(event) {
+    var description = document.getElementById('description');
+    var eventName = document.getElementById('eventName');
+    var eventImage = document.getElementById('eventImage');
+    var eventAddress = document.getElementById('eventAddress');
+
+    description.innerHTML = event.calEvent.description;
+    eventName.innerHTML = "Event: " + event.calEvent.eventName;
+    eventAddress.innerHTML = "<i>Address: " + event.calEvent.locations[0].address + "</i>";
+    eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
+
+    // var url = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
+    // var http = new XMLHttpRequest();
+    // http.open('HEAD', url, false);
+    // http.send();
+    // if(http.status != 404) {
+    //     eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
+    // }
+    // else {
+    //     eventImage.src = "../../images/imgSample.svg";
+    // }
+
 
 }
 /*
