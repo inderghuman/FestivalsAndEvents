@@ -1,9 +1,12 @@
 var map;
+//var eventDetails = document.getElementById("eventDetails");
+//var eventSocialMedia = document.getElementById("eventSocialMedia");
+//eventDetails.style.display = "none";
+//eventSocialMedia.style.display = "none";
 /*
 * Init: initializes the google map api
 * */
 function init(){
-
     var toronto = {lat: 43.70011, lng: -79.4163};
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 11,
@@ -95,27 +98,33 @@ function populateMap(json){
 }
 
 function moreInfo(event) {
+
     var description = document.getElementById('description');
     var eventName = document.getElementById('eventName');
     var eventImage = document.getElementById('eventImage');
     var eventAddress = document.getElementById('eventAddress');
+    var eventPeak = document.getElementById('eventPeak');
+    var eventFree = document.getElementById('eventFree');
+    var eventRes = document.getElementById('eventRes');
+    var eventPhone = document.getElementById('eventPhone');
+    var eventCat = document.getElementById('eventCat');
 
     description.innerHTML = event.calEvent.description;
-    eventName.innerHTML = "Event: " + event.calEvent.eventName;
-    eventAddress.innerHTML = "<i>Address: " + event.calEvent.locations[0].address + "</i>";
+    eventName.innerHTML = "Event: <i>" + event.calEvent.eventName + "</i>";
+    eventAddress.innerHTML = "<b>Address:</b> " + event.calEvent.locations[0].address;
+    eventCat.innerHTML = "<b>Event Category: </b>" + (event.calEvent.categoryString ? event.calEvent.categoryString : "Unavailable");
+    eventPeak.innerHTML = "<b>Peak Attendance: </b>" + (event.calEvent.expectedPeak ? event.calEvent.expectedPeak : "Unavailable");
+    eventFree.innerHTML = "<b>Free: </b>" + (event.calEvent.freeEvent ? event.calEvent.freeEvent : "Unavailable");
+    eventRes.innerHTML = "<b>Reservation Required: </b>" + (event.calEvent.reservationsRequired ? event.calEvent.reservationsRequired : "Unavailable");
+    eventPhone.innerHTML = "<b>Phone Number: </b>" + (event.calEvent.eventPhone ? event.calEvent.eventPhone : "Unavailable");
     eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
 
-    // var url = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
-    // var http = new XMLHttpRequest();
-    // http.open('HEAD', url, false);
-    // http.send();
-    // if(http.status != 404) {
-    //     eventImage.src = "http://app.toronto.ca" + event.calEvent.thumbImage.url;
-    // }
-    // else {
-    //     eventImage.src = "../../images/imgSample.svg";
-    // }
+    document.getElementById("eventDetails").style.display = "inline";
+    //document.getElementById("eventDetails").scrollIntoView(); //Automatically scroll page to eventDetails
 
+}
+
+function selectTransportation(method){
 
 }
 /*

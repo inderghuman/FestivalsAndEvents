@@ -21,4 +21,8 @@ body {
 }
 .gap-right {
   margin-right: 15px;
+  margin-bottom: 15px;
+}
+.padding-15 {
+  padding: 15px;
 }
