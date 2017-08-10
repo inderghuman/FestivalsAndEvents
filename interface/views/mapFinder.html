@@ -28,11 +28,12 @@
 <body>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
-<div class="container">
-<div class="navbar-header">
-<a class="navbar-brand" href="index.html">Home</a>
-</div>
-</div>
+    <div class="container">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="index.html">Home</a>
+        </div>
+
+    </div>
 </nav>
 
 
@@ -60,20 +61,36 @@
         <div class="col-md-4">
             <h3>Filters</h3>
             <hr>
-            <form>
+            <form id="filterGroup">
 
-                <div class="checkbox">
-                    <label>
-                        <input type="checkbox"> Filter #1
-                    </label><br>
-                    <label>
-                        <input type="checkbox"> Filter #2
-                    </label><br>
-                    <label>
-                        <input type="checkbox"> Filter #3
-                    </label>
+                <div class="form-group" >
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" id="freeEventCheck"> Free event
+                        </label>
+                        <label>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="checkbox" id="reservationCheck"> Reservation required
+                        </label><br>
+
+                    </div>
+                    <label for="eventCategories">Categories:</label>
+                    <select style="height:100px;" multiple class="form-control" id="eventCategories">
+                    </select><br>
+
+                    <label for="eventFeatures">Features:</label>
+                    <select multiple class="form-control" id="eventFeatures">
+                    </select>
+
+                    <br>
+                    <label for="accessibilitySelect">Accessibility:</label>
+                    <select class="form-control" id="accessibilitySelect">
+                        <option value="full" selected>Full</option>
+                        <option value="none">None</option>
+                    </select>
                 </div>
-                <button type="submit" class="btn btn-info">Apply</button>
+
+                <button class="btn btn-info" id="submitFilters"
+                onclick="applyEventFilters();return false;">Apply filters</button>
             </form>
         </div>
 
@@ -97,6 +114,8 @@
                     <span id="eventEndDate"></span><br>
                     <span id="eventAddress"></span><br>
                     <span id="eventCat"></span><br>
+                    <span id="eventFeaturesInfo"></span><br>
+                    <span id="eventAccessibility"></span><br>
                     <span id="eventPeak"></span><br>
                     <span id="eventFree"></span><br>
                     <span id="eventRes"></span><br>
