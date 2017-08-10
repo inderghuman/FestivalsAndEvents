@@ -79,3 +79,19 @@ body {
   right: 10%;
   top: 10%;
 }
+
+.gsc-search-button {
+  height:  30px !important;
+}
+
+.gsc-input {
+  margin-top: -5px !important;
+  margin-left: -5px !important;
+}
+.gsc-control-cse {
+  height: 10px !important;
+  margin-top: -7px;
+}
+.gsc-search-button {
+  width: 70px !important;
+}
