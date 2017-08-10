@@ -10,6 +10,7 @@ var categoriesList = [];
 var featuresList = [];
 var markers = [];
 var markerCluster;
+var currentEvent;
 //var eventDetails = document.getElementById("eventDetails");
 //var eventSocialMedia = document.getElementById("eventSocialMedia");
 //eventDetails.style.display = "none";
@@ -248,6 +249,8 @@ function populateMapFilters(json){
                 infowindow.open(map,marker);
 
                 moreInfo(event, marker);
+                currentEvent = event.calEvent;
+                $('#flickr-search').submit();
                 selectedMarker = marker;
 
             });
@@ -340,6 +343,8 @@ function populateMap(json, applyFilters){
                 infowindow.open(map,marker);
 
                 moreInfo(event, marker);
+                currentEvent = event.calEvent;
+                $('#flickr-search').submit();
                 selectedMarker = marker;
 
             });
@@ -486,6 +491,7 @@ function moreInfo(event) {
     var eventEndDate = document.getElementById('eventEndDate');
     var eventFeature = document.getElementById('eventFeaturesInfo');
     var eventAccs = document.getElementById('eventAccessibility');
+    var eventLocation = document.getElementById('eventLocation');
 
 
     description.innerHTML = event.calEvent.description;
@@ -494,6 +500,7 @@ function moreInfo(event) {
     eventStartDate.innerHTML = "<b>Start date:</b> " + event.calEvent.startDate.split('T')[0];
     eventEndDate.innerHTML = "<b>End date:</b> " + event.calEvent.endDate.split('T')[0];
     eventCat.innerHTML = "<b>Event Category: </b>" + (event.calEvent.categoryString ? event.calEvent.categoryString : "Unavailable");
+    eventLocation.innerHTML = "<b>Event Location: </b>" + (event.calEvent.locations[0].locationName ? event.calEvent.locations[0].locationName : "Unavailable");
     eventFeature.innerHTML = "<b>Event Features: </b>" + (event.calEvent.features && Object.keys(event.calEvent.features).length > 0 ? Object.keys(event.calEvent.features).join(", ") : "Unavailable");
     eventAccs.innerHTML = "<b>Accessibility:</b> " + (event.calEvent.accessibility ? event.calEvent.accessibility : "Unavailable");
     eventPeak.innerHTML = "<b>Peak Attendance: </b>" + (event.calEvent.expectedPeak ? event.calEvent.expectedPeak : "Unavailable");
