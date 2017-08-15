@@ -251,6 +251,7 @@ function populateMapFilters(json){
                 moreInfo(event, marker);
                 $('#orgNameid').html(event.calEvent.orgName);
                 searchBYorgName(event.calEvent.orgName);
+                makeYoutubeRequest(event.calEvent.eventName);
                 currentEvent = event.calEvent;
                 $('#flickr-search').submit();
                 selectedMarker = marker;
@@ -347,6 +348,7 @@ function populateMap(json, applyFilters){
                 moreInfo(event, marker);
                 $('#orgNameid').html(event.calEvent.orgName);
                 searchBYorgName(event.calEvent.orgName);
+                makeYoutubeRequest(event.calEvent.eventName);
                 currentEvent = event.calEvent;
                 $('#flickr-search').submit();
                 selectedMarker = marker;

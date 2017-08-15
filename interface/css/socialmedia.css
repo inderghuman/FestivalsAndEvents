@@ -4,3 +4,8 @@
     height: 300px;
     overflow-y: scroll;
 }
+#ytVideo{
+
+    display:inline-block;
+    padding:15px;
+}
