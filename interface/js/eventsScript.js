@@ -249,6 +249,8 @@ function populateMapFilters(json){
                 infowindow.open(map,marker);
 
                 moreInfo(event, marker);
+                $('#orgNameid').html(event.calEvent.orgName);
+                searchBYorgName(event.calEvent.orgName);
                 currentEvent = event.calEvent;
                 $('#flickr-search').submit();
                 selectedMarker = marker;
@@ -343,6 +345,8 @@ function populateMap(json, applyFilters){
                 infowindow.open(map,marker);
 
                 moreInfo(event, marker);
+                $('#orgNameid').html(event.calEvent.orgName);
+                searchBYorgName(event.calEvent.orgName);
                 currentEvent = event.calEvent;
                 $('#flickr-search').submit();
                 selectedMarker = marker;
