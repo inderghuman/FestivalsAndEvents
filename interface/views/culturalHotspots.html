@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Map</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Cultural hotspots finder</title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">  </script>
+    <script src="../js/hotspotsScript.js"></script>
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Custom styles for this template -->
+    <link href="../css/jumbotron.css" rel="stylesheet">
+    <link href="../css/culturalHotspots.css" rel="stylesheet">
+
+</head>
+<body id="body">
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">Home</a>
+            <a class="navbar-brand" href="mapFinder.html">Event finder</a>
+        </div>
+
+
+    </div>
+</nav>
+
+
+
+</div>
+
+<div id="map"></div>
+
+<div id><b>Filters</b><br/>
+    <select id="select">
+        <option>Restaurants</option>
+        <option>Bar</option>
+        <option>Public Art</option>
+        <option>Creative</option>
+        <option>Park</option>
+        <option>Heritage</option>
+        <option>Community</option>
+        <option>Library</option>
+        <option>Architecture</option>
+        <option>Nature</option>
+        <option>History</option>
+    </select>
+
+    <div id="info"></div>
+
+    <div id="test"></div>
+
+
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script>
+        var map;
+        var points;
+        var markers=[];
+        var markerCluster;
+
+        function initMap() { <!--looks like a constructor, new instance for map clase-->
+            <!--In the script below is using the function however is in quotes aparently it does not know he is gonna use it-->
+            var mylatlong={lat: 43.639832, lng: -79.355954};
+
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: mylatlong, <!--is very similar to JSON without double quotes-->
+                zoom: 10
+            });
+
+            initComponents();
+        }
+
+
+
+
+        function initComponents(){
+            console.log("Welcome")
+            $('#gsc-i-id1').val("");
+            $('.gsc-wrapper').hide();
+            loadMarkers("Restaurants");
+            showMarkers();
+            document.getElementById("info").innerHTML="";
+            document.getElementById("test").innerHTML="";
+
+
+        };
+
+        $("#select").change(function() {
+            deleteMarkers();
+            var selection = document.getElementById("select").value;
+            loadMarkers(selection);
+            showMarkers();
+            $('#gsc-i-id1').val("");
+            $('.gsc-wrapper').hide(1200);
+        });
+
+        function loadMarkers(selection){
+            $.getJSON('../Ajax/restaurantsjson.json',function(data) {
+                points = data.HOTSPOTS;
+                $.each(points,function(index,point){
+                    if(point.CATEGORY===selection) {
+                        var mylatlong = {lat: point.LATITUDE, lng: point.LONGITUDE};
+                        var marker = new google.maps.Marker({
+                            position: mylatlong,
+                            map: map,
+                            title: point.PNT_OF_INT
+                        });
+                        var mycontent = "<b>Point of Interest: </b>" + point.PNT_OF_INT + "<br/>"
+                            + "<b>Category: </b>" + point.CATEGORY
+
+                        var information="<h1>The information is</h1>"+"<b>Point of Interest: </b>" + point.PNT_OF_INT +
+                            "<br/>" + "<b>Category: </b>" + point.CATEGORY + "<br/>" +
+                            "<b>Description: </b>" + point.DESCRPTION
+
+                        var infowindow = new google.maps.InfoWindow({
+                            content: mycontent
+                        });
+                        marker.addListener('mouseover', function () {
+                            infowindow.open(map, marker);
+
+                        });
+                        marker.addListener('mouseout', function () {
+                            infowindow.close(map, marker);
+                        });
+                        marker.addListener('click', function () {
+                            document.getElementById("info").innerHTML=information;
+                            $('#gsc-i-id1').val(point.PNT_OF_INT);
+                            $('.gsc-search-button').click();
+                            $('.gsc-wrapper').show();
+                        });
+                        markers.push(marker);
+                    };
+                });
+                markerCluster=new
+                MarkerClusterer(map,markers,
+                    {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+            });
+        };
+
+        function clearMarkers() {
+            setMapOnAll(null);
+
+        };
+
+        function showMarkers() {
+            setMapOnAll(map);
+        }
+
+        function setMapOnAll(map) {
+
+            for (var i = 0; i < markers.length; i++) {
+                markers[i].setMap(map);
+            }
+        };
+
+        function deleteMarkers() {
+            clearMarkers();
+            markers = [];
+            markerCluster.clearMarkers();
+            document.getElementById("info").innerHTML=null;
+
+        }
+
+
+    </script>
+
+    <script>
+        var myCallback = function() {
+            if (document.readyState == 'complete') {
+                // Document is ready when CSE element is initialized.
+                // Render an element with both search box and search results in div with id 'test'.
+                google.search.cse.element.render(
+                    {
+                        div: "test",
+                        tag: 'search'
+                    });
+            } else {
+                // Document is not ready yet, when CSE element is initialized.
+                google.setOnLoadCallback(function() {
+                    // Render an element with both search box and search results in div with id 'test'.
+                    google.search.cse.element.render(
+                        {
+                            div: 'test',
+                            tag: 'search'
+                        });
+                }, true);
+            }
+        };
+
+        // Insert it before the CSE code snippet so that cse.js can take the script
+        // parameters, like parsetags, callbacks.
+        window.__gcse = {
+            parsetags: 'explicit',
+            callback: myCallback
+        };
+
+        (function() {
+            var cx = '012086253174649870431:niwx0j28jce'; // Insert your own Custom Search engine ID here
+            var gcse = document.createElement('script'); gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = 'https://cse.google.com/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+        })();
+        </script>
+
+
+
+
+    <!-- Bootstrap core JavaScript
+        ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="../../dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+
+    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCw7S5tVhECVJk-A-oBOj8Hp23HJj8Xddg&callback=initMap"
+            async defer></script> <!--async defer do everything and , when the response come back do something-->
+
+
+</body>
+</html>
