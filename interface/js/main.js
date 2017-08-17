@@ -18,7 +18,7 @@
 //         }
 //     }
 // })
-
+/*
 window.Fuse = Fuse;
 new Vue({
     el: '#app',
@@ -196,6 +196,6 @@ new Vue({
     }
 
 });
-
+*/
 
 
