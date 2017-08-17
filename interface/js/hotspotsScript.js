@@ -19,7 +19,7 @@ var map;
 
 
         function initComponents(){
-            console.log("Welcome")
+
             $('#gsc-i-id1').val("");
             $('.gsc-wrapper').hide();
             loadMarkers("Restaurants");

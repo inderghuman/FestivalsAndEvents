@@ -45,7 +45,7 @@ Instagram.init({
 $(document).ready(function () {
         var acc = '5820591755';
         Instagram.userMedia(acc, function(response){
-            console.log(response);
+
             //append to the instagram id my result
             var $instagram = $('#instagram');
             $instagram.html('');
@@ -60,7 +60,7 @@ $(document).ready(function () {
             }
         });
         Instagram.userMediaSmall(acc, function(response){
-            console.log(response);
+
             //append to the instagram id my result
             var $instagramSmall = $('#instagram-small');
             $instagramSmall.html('');

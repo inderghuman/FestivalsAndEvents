@@ -19,7 +19,6 @@ $(document).ready(function() {
             function(data){
                 var result = '';
                 var count = 0;
-                console.log(data);
                 if (data.items.length > 0) {
 
                     $.each(data.items,function(i,photo) {

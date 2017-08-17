@@ -29,11 +29,9 @@ function init(){
         center: toronto
     });
     navigator.geolocation.getCurrentPosition(function(location) {
-        console.log(location.coords.latitude);
-        console.log(location.coords.longitude);
         currentLat = location.coords.latitude;
         currentLgt = location.coords.longitude;
-        //console.log(location.coords.accuracy);
+
     });
 }
 
@@ -248,10 +246,18 @@ function populateMapFilters(json){
 
                 infowindow.open(map,marker);
 
+                var arr= event.calEvent.orgName.split(' ');
+                var stw='';
+                if (arr.length > 1){
+                    stw=arr.slice(0,2).join('');
+                }else{
+                    stw=arr[0].trim();
+                }
                 moreInfo(event, marker);
                 $('#orgNameid').html(event.calEvent.orgName);
                 searchBYorgName(event.calEvent.orgName);
                 makeYoutubeRequest(event.calEvent.eventName);
+                getTweets(stw);
                 currentEvent = event.calEvent;
                 $('#flickr-search').submit();
                 selectedMarker = marker;
@@ -345,10 +351,18 @@ function populateMap(json, applyFilters){
 
                 infowindow.open(map,marker);
 
+                var arr= event.calEvent.orgName.split(' ');
+                var stw='';
+                if (arr.length > 1){
+                    stw=arr.slice(0,3).join('');
+                }else{
+                    stw=arr[0].trim();
+                }
                 moreInfo(event, marker);
                 $('#orgNameid').html(event.calEvent.orgName);
                 searchBYorgName(event.calEvent.orgName);
                 makeYoutubeRequest(event.calEvent.eventName);
+                getTweets(stw);
                 currentEvent = event.calEvent;
                 $('#flickr-search').submit();
                 selectedMarker = marker;
@@ -542,7 +556,6 @@ $(document).ready(function(){
         dataType: 'jsonp',
         success: function(json) {
 
-            console.log("event JSON load");
             jsonContent = json;
             populateMap(json);
 
@@ -565,7 +578,6 @@ $(document).ready(function(){
             } else {
                 msg = 'Uncaught Error.\n' + jqXHR.responseText;
             }
-            console.log(msg);
             $.getJSON( "../Ajax/events.json", function(json) {
 
                 jsonContent = json;
